@@ -1,0 +1,22 @@
+begin
+  require 'autotest/fsevent' 
+  require 'autotest/growl'
+rescue LoadError
+end
+ 
+Autotest.add_hook :initialize do |at|
+ 
+  at.add_mapping(/^spec\/**\/*_spec\.rb$/, true) { |filename, _|  
+    filename
+  }
+ 
+  at.add_mapping(/^spec\/support\/.*\.rb$/, true) { |_, _|
+    Dir['spec/**/*_spec.rb']
+  }
+ 
+  at.add_mapping(/^app\/(.*)\.rb$/, true) { |_, m|
+    Dir["spec/#{m[1]}_spec.rb"]
+  }
+ 
+  nil
+end
